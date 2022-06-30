@@ -52,10 +52,10 @@ def loadDB():
     df3.to_sql('Tx_temp_dec2', engine, index=False)
     df4.to_sql('Tx_temp_inc2', engine, index=False)
     """
-    drop_table('Tx_temp_inc2', engine)
-    drop_table('Tx_temp_dec2', engine)
-    drop_table('Tx_curv_inc2', engine)
-    drop_table('Tx_curv_dec2', engine)
+    #engine=drop_table('Tx_temp_inc2', engine)
+    engine=drop_table('Tx_temp_dec2', engine)
+    engine=drop_table('Tx_curv_inc2', engine)
+    engine=drop_table('Tx_curv_dec2', engine)
     table_df1 = pd.read_sql_table('Tx_curv_dec',con=engine)
     #print(table_df1)
     
