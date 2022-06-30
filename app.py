@@ -54,13 +54,17 @@ def loadDB():
     df3.to_sql('Tx_temp_dec2', engine, index=False)
     df4.to_sql('Tx_temp_inc2', engine, index=False)
     """
+    engine.execute("DROP table IF EXISTS Tx_curv_inc2")
+    engine.execute("DROP table IF EXISTS Tx_curv_dec2")
+    engine.execute("DROP table IF EXISTS Tx_temp_inc2")
+    engine.execute("DROP table IF EXISTS Tx_temp_dec2")
     """    
     #para borar en localhost pero en cleardb no creo haya funcionado
     engine=drop_table('Tx_temp_inc2', engine)
     engine=drop_table('Tx_temp_dec2', engine)
     engine=drop_table('Tx_curv_inc2', engine)
     engine=drop_table('Tx_curv_dec2', engine)
-    table_df1 = pd.read_sql_table('Tx_curv_dec',con=engine)
+    
     #print(table_df1)
     """
     """
@@ -71,6 +75,7 @@ def loadDB():
         df.to_sql('Tx_curv_dec2', con=conn, schema='MZI_SCF_fatt', if_exists='replace')
         conn.close()
     """
+    table_df1 = pd.read_sql_table('Tx_curv_dec',con=engine)
     fig = fu.PlotParamIntLgd(table_df1,True)
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return render_template('plotDB.html', graphJSON=graphJSON)
