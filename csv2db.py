@@ -1,22 +1,27 @@
 #import mysql-connector-python
 import pandas as pd
 import pymysql
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 import os 
+from os.path import join, dirname, realpath
 from flask import Flask, jsonify, g,abort, render_template, request, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy import create_engine
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+mysqlconnector://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a'
+# Carpeta de subida
+app.config['UPLOAD_FOLDER'] = 'static'
+app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] =False
-
-#db = SQLAlchemy(app)
-
-#db.create_all()
-
-engine = create_engine("mysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
-
+engine = create_engine("mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
+basedir = os.path.abspath(os.path.dirname(__file__))
+filepath = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
+os.chdir(filepath)
+print("leer los csv con pandas")
 df1 = pd.read_csv("curv_dec.csv")
 df2 = pd.read_csv("curv_inc.csv")
 df3 = pd.read_csv("temp_dec.csv")
