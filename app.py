@@ -1,20 +1,28 @@
 #import mysql-connector-python
 import pandas as pd
+import MyFunctions as fu
 import pymysql
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 import os 
 from os.path import join, dirname, realpath
+import json
+import plotly
+pd.options.plotting.backend = "plotly"
+
 from flask import Flask, jsonify, g,abort, render_template, request, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy import create_engine
+from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import declarative_base
 
 app = Flask(__name__)
 # Carpeta de subida
 app.config['UPLOAD_FOLDER'] = 'static'
 app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a'
+#app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://esilva:Cr1st0_R3y@localhost/MZI_SCF_fatt'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] =False
 
 
@@ -28,6 +36,7 @@ def upload_file():
 def loadDB():
     basedir = os.path.abspath(os.path.dirname(__file__))
     engine = create_engine("mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
+    #engine = create_engine("mysql+pymysql://esilva:Cr1st0_R3y@localhost/MZI_SCF_fatt")
     basedir = os.path.abspath(os.path.dirname(__file__))
     filepath = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
     os.chdir(filepath)
@@ -43,19 +52,24 @@ def loadDB():
     df3.to_sql('Tx_temp_dec2', engine, index=False)
     df4.to_sql('Tx_temp_inc2', engine, index=False)
     """
-    table_df1 = pd.read_sql_table(
-    'Tx_curv_dec',
-    index_col='Wavelength',
-    con=engine)
-    #Resultado de la tabla
-    result = table_df1.to_json(orient="columns")
-    #borrar tabalas
-    drop_table('Tx_curv_dec2', engine)
-    drop_table('Tx_curv_inc2', engine)
-    drop_table('Tx_temp_dec2', engine)
     drop_table('Tx_temp_inc2', engine)
-    return result
-
+    drop_table('Tx_temp_dec2', engine)
+    drop_table('Tx_curv_inc2', engine)
+    drop_table('Tx_curv_dec2', engine)
+    table_df1 = pd.read_sql_table('Tx_curv_dec',con=engine)
+    #print(table_df1)
+    
+    """
+    #esto vacía a tabla, pero no la borra
+    with engine.connect() as conn, conn.begin():
+        df = pd.read_sql('select * from Tx_curv_dec2 limit 1', con=conn)
+        print (df.head())
+        df.to_sql('Tx_curv_dec2', con=conn, schema='MZI_SCF_fatt', if_exists='replace')
+        conn.close()
+    """
+    fig = fu.PlotParamIntLgd(table_df1,True)
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return render_template('plotDB.html', graphJSON=graphJSON)
 
 def drop_table(table_name, engine):
     Base = declarative_base()
@@ -64,7 +78,7 @@ def drop_table(table_name, engine):
     table = metadata.tables[table_name]
     if table is not None:
         Base.metadata.drop_all(engine, [table], checkfirst=True)
-    return
+    return engine
 
   
 #https://stackoverflow.com/questions/35918605/how-to-delete-a-table-in-sqlalchemy
