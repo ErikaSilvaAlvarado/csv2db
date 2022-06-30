@@ -37,6 +37,8 @@ def loadDB():
     basedir = os.path.abspath(os.path.dirname(__file__))
     engine = create_engine("mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
     #engine = create_engine("mysql+pymysql://esilva:Cr1st0_R3y@localhost/MZI_SCF_fatt")
+    #metadata = MetaData()
+    #metadata.reflect(engine)
     basedir = os.path.abspath(os.path.dirname(__file__))
     filepath = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
     os.chdir(filepath)
@@ -52,13 +54,15 @@ def loadDB():
     df3.to_sql('Tx_temp_dec2', engine, index=False)
     df4.to_sql('Tx_temp_inc2', engine, index=False)
     """
-    #engine=drop_table('Tx_temp_inc2', engine)
+    """    
+    #para borar en localhost pero en cleardb no creo haya funcionado
+    engine=drop_table('Tx_temp_inc2', engine)
     engine=drop_table('Tx_temp_dec2', engine)
     engine=drop_table('Tx_curv_inc2', engine)
     engine=drop_table('Tx_curv_dec2', engine)
     table_df1 = pd.read_sql_table('Tx_curv_dec',con=engine)
     #print(table_df1)
-    
+    """
     """
     #esto vacía a tabla, pero no la borra
     with engine.connect() as conn, conn.begin():
@@ -74,6 +78,7 @@ def loadDB():
 def drop_table(table_name, engine):
     Base = declarative_base()
     metadata = MetaData()
+    metadata.reflect(engine)
     metadata.reflect(bind=engine)
     table = metadata.tables[table_name]
     if table is not None:
