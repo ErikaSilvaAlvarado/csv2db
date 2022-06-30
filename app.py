@@ -27,7 +27,7 @@ def upload_file():
 @app.route("/load_database", methods=['POST', 'GET'])
 def loadDB():
     basedir = os.path.abspath(os.path.dirname(__file__))
-    engine = create_engine("'mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
+    engine = create_engine("mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
     basedir = os.path.abspath(os.path.dirname(__file__))
     filepath = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
     os.chdir(filepath)
