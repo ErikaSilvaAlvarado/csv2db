@@ -44,33 +44,31 @@ def loadDB():
     df4.to_sql('Tx_temp_inc2', engine, index=False)
     """
     table_df1 = pd.read_sql_table(
-    'Tx_curv_dec2',
+    'Tx_curv_dec',
     index_col='Wavelength',
     con=engine)
-    #Resultado de la tabla#
+    #Resultado de la tabla
     result = table_df1.to_json(orient="columns")
     #borrar tabalas
-    drop_table('Tx_curv_dec2', engine=engine)
-    drop_table('Tx_curv_inc2', engine=engine)
-    drop_table('Tx_temp_dec2', engine=engine)
-    drop_table('Tx_temp_inc2', engine=engine)
+    drop_table('Tx_curv_dec2', engine)
+    drop_table('Tx_curv_inc2', engine)
+    drop_table('Tx_temp_dec2', engine)
+    drop_table('Tx_temp_inc2', engine)
     return result
 
 
-    def drop_table(table_name, engine=engine):
-        Base = declarative_base()
-        metadata = MetaData()
-        metadata.reflect(bind=engine)
-        table = metadata.tables[table_name]
-        if table is not None:
-            Base.metadata.drop_all(engine, [table], checkfirst=True)
+def drop_table(table_name, engine):
+    Base = declarative_base()
+    metadata = MetaData()
+    metadata.reflect(bind=engine)
+    table = metadata.tables[table_name]
+    if table is not None:
+        Base.metadata.drop_all(engine, [table], checkfirst=True)
     return
 
   
 #https://stackoverflow.com/questions/35918605/how-to-delete-a-table-in-sqlalchemy
-"""
 
 if __name__ == '__main__':
     # Iniciamos la aplicación
     app.run(debug=True)
-
