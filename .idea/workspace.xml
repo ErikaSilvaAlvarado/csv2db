@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17202bac-a1b5-4377-9b3e-815030ff6458" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db2df.py" beforeDir="false" afterPath="$PROJECT_DIR$/db2df.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/customPlot.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/generalPlot.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/loadCSV.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

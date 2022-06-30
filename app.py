@@ -10,11 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy import create_engine
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-
-
-
 
 app = Flask(__name__)
 # Carpeta de subida
@@ -29,8 +24,10 @@ def upload_file():
     # renderizamos la plantilla "index.html"
     return render_template('index.html')
 
-@app.route("/load_database")
-    engine = create_engine("mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
+@app.route("/load_database", methods=['POST', 'GET'])
+def loadDB():
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    engine = create_engine("'mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
     basedir = os.path.abspath(os.path.dirname(__file__))
     filepath = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
     os.chdir(filepath)
@@ -38,17 +35,16 @@ def upload_file():
     df2 = pd.read_csv("curv_inc.csv")
     df3 = pd.read_csv("temp_dec.csv")
     df4 = pd.read_csv("temp_inc.csv")
-    df1.to_sql('Tx_curv_dec', engine, index=False)
-    df2.to_sql('Tx_curv_inc', engine, index=False)
-    df3.to_sql('Tx_temp_dec', engine, index=False)
-    df4.to_sql('Tx_temp_inc', engine, index=False)
-
-
-table_df1 = pd.read_sql_table(
-    'Tx_curv_dec',
+    df1.to_sql('Tx_curv_dec2', engine, index=False)
+    df2.to_sql('Tx_curv_inc2', engine, index=False)
+    df3.to_sql('Tx_temp_dec2', engine, index=False)
+    df4.to_sql('Tx_temp_inc2', engine, index=False)
+    table_df1 = pd.read_sql_table(
+    'Tx_curv_dec2',
     index_col='Wavelength',
-    con=engine
-    return "ya"
+    con=engine)
+    result = table_df1.to_json(orient="columns")
+    return result
 
 if __name__ == '__main__':
     # Iniciamos la aplicación
