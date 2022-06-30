@@ -58,6 +58,10 @@ def loadDB():
     engine.execute("DROP table IF EXISTS Tx_curv_dec2")
     engine.execute("DROP table IF EXISTS Tx_temp_inc2")
     engine.execute("DROP table IF EXISTS Tx_temp_dec2")
+    inspector = inspect(engine)
+    table_names = inspector.get_table_names()
+    for table_name in table_names:
+        print(f"Table:{table_name}")
     """    
     #para borar en localhost pero en cleardb no creo haya funcionado
     engine=drop_table('Tx_temp_inc2', engine)
