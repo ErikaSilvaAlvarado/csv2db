@@ -31,6 +31,7 @@ def loadDB():
     basedir = os.path.abspath(os.path.dirname(__file__))
     filepath = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
     os.chdir(filepath)
+    """
     df1 = pd.read_csv("curv_dec.csv")   
     df2 = pd.read_csv("curv_inc.csv")
     df3 = pd.read_csv("temp_dec.csv")
@@ -39,6 +40,7 @@ def loadDB():
     df2.to_sql('Tx_curv_inc2', engine, index=False)
     df3.to_sql('Tx_temp_dec2', engine, index=False)
     df4.to_sql('Tx_temp_inc2', engine, index=False)
+    """
     table_df1 = pd.read_sql_table(
     'Tx_curv_dec2',
     index_col='Wavelength',
