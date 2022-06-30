@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17202bac-a1b5-4377-9b3e-815030ff6458" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/csv2db.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv2db.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/csv2db.py" beforeDir="false" afterPath="$PROJECT_DIR$/csv2db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/curv_dec.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/curv_inc.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp_dec.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp_inc.csv" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,16 +68,5 @@
       <updated>1656453385091</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/csv2db.py</url>
-          <line>29</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
