@@ -13,7 +13,7 @@ pd.options.plotting.backend = "plotly"
 from flask import Flask, jsonify, g,abort, render_template, request, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import declarative_base
 
