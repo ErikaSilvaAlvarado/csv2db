@@ -7,6 +7,21 @@
 
  <body>
     <form name="form1" action="/load_database" method="POST" >
+        <label for="selectValues">Choose signal(s):</label>
+            <select name='selectdb' id="selectdb" multiple >
+            </select>
+                <script>
+                    var select = document.getElementById("selectdb");
+                    var options = {{table_names|safe}};
+                    for(var i = 0; i < options.length; i++) {
+                        var opt = options[i];
+                        var el = document.createElement("option");
+                        el.textContent = opt;
+                        el.value = opt;
+                        select.appendChild(el);
+                    }
+                </script>
+
         <p><input type="submit" value="Submit"></p>
      </form>
 

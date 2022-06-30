@@ -22,15 +22,20 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
 app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a'
 #app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://esilva:Cr1st0_R3y@localhost/MZI_SCF_fatt'
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] =False
 
 
 
 @app.route("/")
 def upload_file():
+    engine = create_engine("mysql+pymysql://b07b4484224a54:edf76401@us-cdbr-east-06.cleardb.net/heroku_daac59f6173f49a")
+    #engine = create_engine("mysql+pymysql://esilva:Cr1st0_R3y@localhost/MZI_SCF_fatt")
+    inspector = inspect(engine)
+    table_names = inspector.get_table_names()
+    for table_name in table_names:
+        print(f"Table:{table_name}")
     # renderizamos la plantilla "index.html"
-    return render_template('index.html')
+    return render_template('index.html',table_names=table_names)
 
 @app.route("/load_database", methods=['POST', 'GET'])
 def loadDB():
@@ -54,14 +59,14 @@ def loadDB():
     df3.to_sql('Tx_temp_dec2', engine, index=False)
     df4.to_sql('Tx_temp_inc2', engine, index=False)
     """
+    """
+    #para borar tablas
     engine.execute("DROP table IF EXISTS Tx_curv_inc2")
     engine.execute("DROP table IF EXISTS Tx_curv_dec2")
     engine.execute("DROP table IF EXISTS Tx_temp_inc2")
     engine.execute("DROP table IF EXISTS Tx_temp_dec2")
-    inspector = inspect(engine)
-    table_names = inspector.get_table_names()
-    for table_name in table_names:
-        print(f"Table:{table_name}")
+    """
+    
     """    
     #para borar en localhost pero en cleardb no creo haya funcionado
     engine=drop_table('Tx_temp_inc2', engine)
@@ -79,7 +84,9 @@ def loadDB():
         df.to_sql('Tx_curv_dec2', con=conn, schema='MZI_SCF_fatt', if_exists='replace')
         conn.close()
     """
-    table_df1 = pd.read_sql_table('Tx_curv_dec',con=engine)
+    table_name = request.form['selectdb']
+    #table_df1 = pd.read_sql_table('Tx_curv_dec',con=engine)
+    table_df1 = pd.read_sql_table(table_name,con=engine)
     fig = fu.PlotParamIntLgd(table_df1,True)
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return render_template('plotDB.html', graphJSON=graphJSON)
