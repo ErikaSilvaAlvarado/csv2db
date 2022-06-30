@@ -9,7 +9,7 @@ from flask import Flask, jsonify, g,abort, render_template, request, redirect, u
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy import create_engine
-
+from sqlalchemy.ext.declarative import declarative_base
 
 app = Flask(__name__)
 # Carpeta de subida
@@ -31,7 +31,9 @@ def loadDB():
     basedir = os.path.abspath(os.path.dirname(__file__))
     filepath = os.path.join(basedir, app.config['UPLOAD_FOLDER'])
     os.chdir(filepath)
+
     """
+    #procedimiento para crear las tablas
     df1 = pd.read_csv("curv_dec.csv")   
     df2 = pd.read_csv("curv_inc.csv")
     df3 = pd.read_csv("temp_dec.csv")
@@ -45,8 +47,28 @@ def loadDB():
     'Tx_curv_dec2',
     index_col='Wavelength',
     con=engine)
+    #Resultado de la tabla#
     result = table_df1.to_json(orient="columns")
+    #borrar tabalas
+    drop_table('Tx_curv_dec2', engine=engine)
+    drop_table('Tx_curv_inc2', engine=engine)
+    drop_table('Tx_temp_dec2', engine=engine)
+    drop_table('Tx_temp_inc2', engine=engine)
     return result
+
+
+    def drop_table(table_name, engine=engine):
+        Base = declarative_base()
+        metadata = MetaData()
+        metadata.reflect(bind=engine)
+        table = metadata.tables[table_name]
+        if table is not None:
+            Base.metadata.drop_all(engine, [table], checkfirst=True)
+    return
+
+  
+#https://stackoverflow.com/questions/35918605/how-to-delete-a-table-in-sqlalchemy
+"""
 
 if __name__ == '__main__':
     # Iniciamos la aplicación
